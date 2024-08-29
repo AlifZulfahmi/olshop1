@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -51,10 +52,10 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
         ]);
 
-        $input = $request->all();
+        $input = $request->only('name', 'email', 'password');
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
@@ -104,15 +105,25 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'password' => 'nullable|same:confirm-password',
+            'roles' => 'required',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gender' => 'nullable|string',
+            'address' => 'nullable|string',
         ]);
 
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
+        $input = $request->only('name', 'email', 'gender', 'address');
+
+        if ($request->hasFile('profile_image')) {
+            $imageName = time() . '.' . $request->file('profile_image')->getClientOriginalExtension();
+            $request->file('profile_image')->storeAs('public/profile_images', $imageName);
+            $input['profile_image'] = $imageName;
+        }
+
+        if ($request->filled('password')) {
+            $input['password'] = Hash::make($request->input('password'));
         } else {
-            $input = Arr::except($input, array('password'));
+            $input = Arr::except($input, ['password']);
         }
 
         $user = User::find($id);

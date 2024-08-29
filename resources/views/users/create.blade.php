@@ -43,7 +43,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('users.store') }}">
+                        <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -83,6 +83,31 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!-- Tambahkan kolom untuk profile_image, gender, dan address -->
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Profile Image:</strong>
+                                        <input type="file" name="profile_image" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Gender:</strong>
+                                        <select name="gender" class="form-control">
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Address:</strong>
+                                        <textarea name="address" placeholder="Address" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Akhir dari tambahan kolom -->
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                     <button type="submit" class="btn btn-primary btn-sm mt-2 mb-3">
                                         <i class="fa-solid fa-floppy-disk"></i> Submit

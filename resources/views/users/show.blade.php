@@ -20,28 +20,41 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-profile">
-                    <div class="card-header" style="background-image: url('assets/img/blogpost.jpg')">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-profile text-center">
+                    <div class="card-header"
+                        style="background-image: url('{{ asset('assets/img/blogpost.jpg') }}'); background-size: cover;">
                         <div class="profile-picture">
                             <div class="avatar avatar-xl">
-                                <img src="assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                                @if ($user->profile_image)
+                                    <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
+                                        alt="Profile Picture" class="avatar-img rounded-circle" />
+                                @else
+                                    <img src="{{ asset('assets/img/profile.jpg') }}" alt="Profile Picture"
+                                        class="avatar-img rounded-circle" />
+                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="user-profile text-center">
+                        <div class="user-profile">
                             <div class="name">{{ $user->name }}</div>
                             <div class="job">{{ $user->email }}</div>
-                            <div class="desc">
+                            <div class="desc mt-2">
                                 @if (!empty($user->getRoleNames()))
                                     @foreach ($user->getRoleNames() as $v)
-                                        <label class="badge badge-success">{{ $v }}</label>
+                                        <span class="badge badge-success">{{ $v }}</span>
                                     @endforeach
                                 @endif
                             </div>
-                            <div class="view-profile">
+                            <!-- Tambahkan bagian untuk Gender dan Address -->
+                            <div class="details mt-3">
+                                <strong>Gender:</strong> {{ $user->gender ?? 'N/A' }}<br>
+                                <strong>Address:</strong> {{ $user->address ?? 'N/A' }}
+                            </div>
+                            <!-- Akhir bagian tambahan -->
+                            <div class="view-profile mt-3">
                                 <a href="{{ route('users.index') }}" class="btn btn-secondary w-100">Back</a>
                             </div>
                         </div>

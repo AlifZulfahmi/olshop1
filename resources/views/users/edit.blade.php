@@ -43,7 +43,8 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <form method="POST" action="{{ route('users.update', $user->id) }}">
+                            <form method="POST" action="{{ route('users.update', $user->id) }}"
+                                enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -89,6 +90,38 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <!-- Tambahkan kolom untuk profile_image, gender, dan address -->
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <strong>Profile Image:</strong>
+                                            @if ($user->profile_image)
+                                                <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
+                                                    alt="Profile Image" width="100" class="mb-3">
+                                            @endif
+                                            <input type="file" name="profile_image" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <strong>Gender:</strong>
+                                            <select name="gender" class="form-control">
+                                                <option value="">Select Gender</option>
+                                                <option value="Male" {{ $user->gender == 'Male' ? 'selected' : '' }}>Male
+                                                </option>
+                                                <option value="Female" {{ $user->gender == 'Female' ? 'selected' : '' }}>
+                                                    Female</option>
+                                                <option value="Other" {{ $user->gender == 'Other' ? 'selected' : '' }}>
+                                                    Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <strong>Address:</strong>
+                                            <textarea name="address" placeholder="Address" class="form-control">{{ $user->address }}</textarea>
+                                        </div>
+                                    </div>
+                                    <!-- Akhir dari tambahan kolom -->
                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                         <button type="submit" class="btn btn-primary btn-sm mt-2 mb-3">
                                             <i class="fa-solid fa-floppy-disk"></i> Submit

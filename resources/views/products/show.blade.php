@@ -1,52 +1,54 @@
-@extends('layouts.app')
+@extends('layouts.adminApp')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Show Product</h2>
+    <div class="container">
+        <div class="page-inner">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">Product Details</h3>
+                <ul class="breadcrumbs mb-3">
+                    <li class="nav-home">
+                        <a href="#">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Product Details</a>
+                    </li>
+                </ul>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-primary btn-sm mb-2" href="{{ route('products.index') }}"><i class="fa fa-arrow-left"></i>
-                    Back</a>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card card-product text-center" style="width: 100%; max-width: 500px;">
+                    <div class="card-header"
+                        style="background-image: url('{{ asset('assets/img/product-background.jpg') }}'); background-size: cover; height: 200px; background-position: center;">
+                        <div class="product-picture">
+                            @if ($product->image)
+                                <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"
+                                    class="product-img rounded" style="width: 150px; height: 150px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('assets/img/default-product.jpg') }}" alt="Default Product"
+                                    class="product-img rounded" style="width: 150px; height: 150px; object-fit: cover;">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="product-profile">
+                            <div class="name font-weight-bold" style="font-size: 1.25rem;">{{ $product->name }}</div>
+                            <div class="detail mt-2">{{ $product->detail }}</div>
+                            <div class="price mt-2">
+                                <strong>Price:</strong> ${{ number_format($product->price, 2) }}
+                            </div>
+                            <div class="view-product mt-3">
+                                <a href="{{ route('products.index') }}" class="btn btn-secondary w-100">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Name:</strong>
-                {{ $product->name }}
-            </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Details:</strong>
-                {{ $product->detail }}
-            </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Price:</strong>
-                ${{ number_format($product->price, 2) }}
-            </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Image:</strong>
-                @if ($product->image)
-                    <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}" class="img-thumbnail"
-                        width="200">
-                @else
-                    <p>No image available</p>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <p class="text-center text-primary"><small>Tutorial by ItSolutionStuff.com</small></p>
 @endsection
