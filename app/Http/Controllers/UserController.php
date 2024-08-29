@@ -17,8 +17,6 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request): View
     {
@@ -30,8 +28,6 @@ class UserController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create(): View
     {
@@ -42,9 +38,6 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request): RedirectResponse
     {
@@ -67,9 +60,6 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id): View
     {
@@ -80,9 +70,6 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id): View
     {
@@ -95,10 +82,6 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -114,12 +97,22 @@ class UserController extends Controller
 
         $input = $request->only('name', 'email', 'gender', 'address');
 
+        // Jika ada gambar yang di-upload
         if ($request->hasFile('profile_image')) {
             $imageName = time() . '.' . $request->file('profile_image')->getClientOriginalExtension();
+
+            // Hapus gambar lama jika ada
+            $user = User::find($id);
+            if ($user->profile_image) {
+                Storage::delete('public/profile_images/' . $user->profile_image);
+            }
+
+            // Simpan gambar baru
             $request->file('profile_image')->storeAs('public/profile_images', $imageName);
             $input['profile_image'] = $imageName;
         }
 
+        // Cek apakah password perlu diperbarui
         if ($request->filled('password')) {
             $input['password'] = Hash::make($request->input('password'));
         } else {
@@ -128,8 +121,9 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->update($input);
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
 
+        // Hapus peran lama dan tambahkan peran baru
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
@@ -138,13 +132,18 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id): RedirectResponse
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+
+        // Hapus gambar profil jika ada
+        if ($user->profile_image) {
+            Storage::delete('public/profile_images/' . $user->profile_image);
+        }
+
+        $user->delete();
+
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully');
     }
