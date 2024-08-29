@@ -23,8 +23,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card card-product text-center" style="width: 100%; max-width: 500px;">
-                    <div class="card-header"
-                        style="background-image: url('{{ asset('assets/img/product-background.jpg') }}'); background-size: cover; height: 200px; background-position: center;">
+                    <div class="card-header">
                         <div class="product-picture">
                             @if ($product->image)
                                 <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"

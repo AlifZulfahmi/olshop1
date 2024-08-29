@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -42,7 +43,9 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('products.create');
+        $subCategories = Category::whereNotNull('parent_id')->get();
+        
+        return view('products.create', compact('subCategories'));
     }
 
     /**
@@ -57,8 +60,15 @@ class ProductController extends Controller
             'name' => 'required',
             'detail' => 'required',
             'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk gambar
         ]);
+
+        $category = Category::find($request->category_id);
+        if (!$category || !$category->parent_id) {
+            return redirect()->back()->withErrors(['category_id' => 'The selected category must be a sub-category.']);
+        }
 
         $input = $request->all();
 
@@ -94,7 +104,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        return view('products.edit', compact('product'));
+        $subCategories = Category::whereNotNull('parent_id')->get();
+
+        return view('products.edit', compact('product', 'subCategories'));
     }
 
     /**
@@ -110,8 +122,15 @@ class ProductController extends Controller
             'name' => 'required',
             'detail' => 'required',
             'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk gambar
         ]);
+
+        $category = Category::find($request->category_id);
+        if (!$category || !$category->parent_id) {
+            return redirect()->back()->withErrors(['category_id' => 'The selected category must be a sub-category.']);
+        }
 
         $input = $request->all();
 

@@ -46,8 +46,10 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Price</th>
+                                            <th>Stock</th>
+                                            <th>Category</th>
                                             <th>Image</th>
-                                            <th width="280px">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -55,8 +57,10 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Price</th>
+                                            <th>Stock</th>
+                                            <th>Category</th>
                                             <th>Image</th>
-                                            <th width="280px">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -65,6 +69,8 @@
                                                 <td>{{ ++$i }}</td>
                                                 <td>{{ $product->name }}</td>
                                                 <td>{{ $product->price }}</td>
+                                                <td>{{ $product->stock }}</td>
+                                                <td>{{ $product->category->name }}</td>
                                                 <td>
                                                     @if ($product->image)
                                                         <img src="{{ asset('images/' . $product->image) }}" width="50"
@@ -106,7 +112,7 @@
                 </div>
             </div>
 
-            {!! $products->links() !!}
+            <!-- {!! $products->links() !!} -->
         </div>
     </div>
 @endsection

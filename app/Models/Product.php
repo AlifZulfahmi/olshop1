@@ -18,6 +18,13 @@ class Product extends Model
         'name',
         'detail',
         'price',
-        'image', // Include the image attribute here
+        'stock',
+        'category_id',
+        'image',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

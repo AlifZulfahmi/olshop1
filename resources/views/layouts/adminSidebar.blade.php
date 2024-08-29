@@ -78,6 +78,11 @@
                                     <span class="sub-item">Product</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('categories.index') }}">
+                                    <span class="sub-item">Category</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
