@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome/testpush');
+    return view('welcome');
 });
 
 Auth::routes();
