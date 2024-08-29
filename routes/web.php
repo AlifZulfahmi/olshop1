@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('landing');
-});
+
+Route::get('/', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
+
 
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
