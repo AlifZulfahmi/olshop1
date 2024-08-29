@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\shopController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -20,8 +21,10 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
+
+Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
 Auth::routes();
 
