@@ -50,7 +50,13 @@
             <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                        @if (Auth::user()->profile_image)
+                            <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}"
+                                alt="image profile" class="avatar-img rounded" />
+                        @else
+                            <!-- Jika tidak, gunakan gambar default -->
+                            <img src="/assets/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
+                        @endif
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
@@ -62,39 +68,49 @@
                         <li>
                             <div class="user-box">
                                 <div class="avatar-lg">
-                                    <img src="/assets/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
+                                    <!-- Cek apakah pengguna memiliki gambar profil -->
+                                    @if (Auth::user()->profile_image)
+                                        <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}"
+                                            alt="image profile" class="avatar-img rounded" />
+                                    @else
+                                        <!-- Jika tidak, gunakan gambar default -->
+                                        <img src="/assets/img/profile.jpg" alt="image profile"
+                                            class="avatar-img rounded" />
+                                    @endif
                                 </div>
                                 <div class="u-text">
                                     <h4>{{ Auth::user()->name }}</h4>
                                     @if (isset($user))
-                                        <a href="{{ route('users.show', $user->id) }}"
+                                        <a href="{{ route('users.show', Auth::user()->id) }}"
                                             class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                     @endif
-
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
                             @if (isset($user))
-                                <a class="dropdown-item" href="{{ route('users.show', $user->id) }}">My Profile</a>
+                                <a class="dropdown-item" href="{{ route('users.show', Auth::user()->id) }}">My
+                                    Profile</a>
                             @endif
-                            <a class="dropdown-item" href="#">My Balance</a>
-                            <a class="dropdown-item" href="#">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Account Setting</a>
-                            <div class="dropdown-divider"></div>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <a class="dropdown-item" href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">Logout</a>
-                            </form>
                         </li>
-                    </div>
-                </ul>
+
+                        <a class="dropdown-item" href="#">My Balance</a>
+                        <a class="dropdown-item" href="#">Inbox</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Account Setting</a>
+                        <div class="dropdown-divider"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a class="dropdown-item" href="route('logout')"
+                                onclick="event.preventDefault();
+                                                this.closest('form').submit();">Logout</a>
+                        </form>
             </li>
-        </ul>
+    </div>
+    </ul>
+    </li>
+    </ul>
     </div>
 </nav>
 <!-- End Navbar -->
