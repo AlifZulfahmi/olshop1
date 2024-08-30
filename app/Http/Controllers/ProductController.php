@@ -44,7 +44,7 @@ class ProductController extends Controller
     public function create(): View
     {
         $subCategories = Category::whereNotNull('parent_id')->get();
-        
+
         return view('products.create', compact('subCategories'));
     }
 

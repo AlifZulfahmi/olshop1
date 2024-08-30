@@ -101,10 +101,12 @@ class ShoppingCartController extends Controller
 
     public function selectPayment($id)
     {
-        // Konfigurasi Midtrans
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION') === 'true';
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        // Konfigurasi Midtrans 
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
         // Temukan pesanan berdasarkan ID

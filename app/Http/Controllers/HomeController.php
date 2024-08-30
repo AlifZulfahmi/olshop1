@@ -18,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -28,7 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $products = Product::all(); // Mengambil semua data produk
+
+        return view('home', compact('products')); // Mengirim data produk ke view welcome
     }
 
     public function getProducts()

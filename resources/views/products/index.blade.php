@@ -50,7 +50,7 @@
                                             <th>Category</th>
                                             <th>Image</th>
                                             <th>Action</th>
-                                        </tr>
+                                                                                                                                                                                                                                                                                                                                                                       </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>

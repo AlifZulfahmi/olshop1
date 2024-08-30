@@ -26,9 +26,11 @@ Route::get('/', [HomeController::class, 'getProducts']); // Ganti route default 
 
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
