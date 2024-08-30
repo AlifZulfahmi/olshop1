@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Midtrans\Transaction;
 use Midtrans\Snap;
 use Midtrans\Config;
 
@@ -18,7 +20,7 @@ class ShoppingCartController extends Controller
         }
 
         $orders = Order::where('user_id', Auth::id())->get();
-        return view('shopping_cart.index', compact('orders'));
+        return view('shopping-cart.index', compact('orders'));
     }
 
     public function addToCart($id)
@@ -54,23 +56,30 @@ class ShoppingCartController extends Controller
 
         return redirect()->route('shopping-cart.index')->with('success', 'Product added to cart successfully!');
     }
-
     public function removeFromCart($id)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
+        // Cek ID produk yang diterima
+        \Log::info('Attempting to remove product from cart', ['product_id' => $id]);
+
+        // Temukan order berdasarkan user_id dan produk_id
         $order = Order::where('user_id', Auth::id())->where('produk_id', $id)->first();
 
         if (!$order) {
+            // Log error jika produk tidak ditemukan
+            \Log::warning('Product not found in cart', ['user_id' => Auth::id(), 'product_id' => $id]);
             return redirect()->back()->with('error', 'Product not found in cart');
         }
 
+        // Hapus order
         $order->delete();
 
         return redirect()->route('shopping-cart.index')->with('success', 'Product removed from cart successfully!');
     }
+
 
     public function updateQuantity(Request $request, $id)
     {
@@ -85,16 +94,18 @@ class ShoppingCartController extends Controller
         $order->total_harga = $order->quantity * $product->price;
         $order->save();
 
-        return redirect()->route('shopping-cart.index')->with('success', 'Quantity updated successfully');
+        return redirect()->route('shopping-cart.select_payment')->with('success', 'Quantity updated successfully');
     }
+
+
 
     public function selectPayment($id)
     {
-        // Inisialisasi konfigurasi Midtrans
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
+        // Konfigurasi Midtrans
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION') === 'true';
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
 
         // Temukan pesanan berdasarkan ID
         $order = Order::find($id);
@@ -112,26 +123,66 @@ class ShoppingCartController extends Controller
         // Siapkan parameter untuk Snap Token
         $params = [
             'transaction_details' => [
-                'order_id' => $order->id,
+                'order_id' => $order->id, // ID order
                 'gross_amount' => $order->total_harga,
             ],
             'customer_details' => [
-                'first_name' => $order->user->name ?? 'Guest',
-                'email' => $order->user->email ?? 'guest@example.com',
+                'first_name' => 'Saudara...',
+                'last_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
             ],
         ];
 
         // Buat Snap Token
-        $snapToken = Snap::getSnapToken($params);
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to generate Snap Token: ' . $e->getMessage());
+        }
 
-        // Kirim token ke view
-        return view('shopping-cart.select-payment', compact('snapToken', 'id'));
+        // Kirim token dan orderId ke view
+        return view('shopping-cart.select_payment', [
+            'snapToken' => $snapToken,
+            'orderId' => $order->id // Mengirimkan orderId ke view
+        ]);
     }
+
 
 
     public function processPayment(Request $request, $id)
     {
-        // Logika untuk memproses pembayaran
-        // Implementasi untuk menangani notifikasi webhook dari Midtrans
+        // Temukan pesanan berdasarkan ID
+        $order = Order::find($id);
+
+        // Cek apakah pesanan ditemukan
+        if (!$order) {
+            return redirect()->route('shopping-cart.index')->with('error', 'Order not found.');
+        }
+
+        // Ambil Snap Token dari query string
+        $snapToken = $request->input('snap_token');
+
+        // Cek apakah Snap Token ditemukan
+        if (!$snapToken) {
+            return redirect()->back()->with('error', 'Snap Token not found.');
+        }
+
+        // Verifikasi transaksi di Midtrans
+        try {
+            $transactionStatus = \Midtrans\Transaction::status($order->id);
+
+            // Cek status transaksi
+            if ($transactionStatus->transaction_status === 'settlement') {
+                // Pembayaran telah berhasil
+                $order->status = 1; // Atur status pesanan sesuai kebutuhan
+                $order->save();
+                return redirect()->route('shopping-cart.index')->with('success', 'Payment successful.');
+            } else {
+                return redirect()->route('shopping-cart.index')->with('error', 'Payment status: ' . $transactionStatus->transaction_status);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Payment verification failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Payment verification failed: ' . $e->getMessage());
+        }
     }
 }

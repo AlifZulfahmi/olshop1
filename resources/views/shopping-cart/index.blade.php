@@ -27,8 +27,7 @@
                         <th>Image</th>
                         <th>Total Price</th>
                         <th>Quantity</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,25 +38,6 @@
                             $actionButton = '';
                             $totalPrice = $order->total_harga;
 
-                            switch ($order->status) {
-                                case 0:
-                                    $statusText = 'Belum melakukan pembayaran';
-                                    $actionButton =
-                                        '<a href="' .
-                                        route('shopping-cart.select-payment', $order->id) .
-                                        '" class="btn btn-primary btn-sm">Pilih Metode Pembayaran</a>';
-                                    break;
-                                case 1:
-                                    $statusText = 'Lihat Status';
-                                    $actionButton =
-                                        '<a href="' .
-                                        route('shopping-cart.view-status', $order->id) .
-                                        '" class="btn btn-secondary btn-sm">Lihat Status</a>';
-                                    break;
-                                default:
-                                    $statusText = 'Status Tidak Dikenal';
-                                    break;
-                            }
                         @endphp
                         <tr data-product-id="{{ $product->id }}" data-price="{{ $product->price }}">
                             <td>{{ $order->created_at->format('d M Y') }}</td>
@@ -110,9 +90,13 @@
 
             <!-- Tombol untuk Pembayaran -->
             <div class="d-flex justify-content-end">
-                <a href="{{ route('shopping-cart.select-payment', $orders->first()->id) }}" class="btn btn-primary">
-                    Pilih Metode Pembayaran
-                </a>
+                <!-- Menggunakan ID pesanan yang pertama di dalam daftar -->
+                @if ($orders->count())
+                    <form action="{{ route('shopping-cart.select_payment', $orders->first()->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Chekout</button>
+                    </form>
+                @endif
             </div>
         @endif
     </div>

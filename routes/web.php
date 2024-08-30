@@ -24,27 +24,6 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
 
-// web.php
-Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
-
-// Display the shopping cart
-Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart.index');
-
-// Add a product to the shopping cart
-Route::post('/shopping-cart/add/{id}', [ShoppingCartController::class, 'addToCart'])->name('shopping-cart.add');
-
-// Remove a product from the shopping cart
-Route::delete('/shopping-cart/remove/{id}', [ShoppingCartController::class, 'removeFromCart'])->name('shopping-cart.remove');
-
-Route::put('/shopping-cart/update-quantity/{id}', [ShoppingCartController::class, 'updateQuantity'])->name('shopping-cart.update-quantity');
-
-//payment
-Route::get('/shopping-cart/select-payment/{id}', [ShoppingCartController::class, 'selectPayment'])->name('shopping-cart.select-payment');
-
-Route::post('/shopping-cart/process-payment/{id}', [ShoppingCartController::class, 'processPayment'])->name('shopping-cart.process-payment');
-
-
-
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
 Auth::routes();
@@ -56,4 +35,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    // web.php
+    Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
+
+    // Display the shopping cart
+    Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart.index');
+
+    // Add a product to the shopping cart
+    Route::post('/shopping-cart/add/{id}', [ShoppingCartController::class, 'addToCart'])->name('shopping-cart.add');
+
+    // Remove a product from the shopping cart
+    Route::delete('/shopping-cart/remove/{id}', [ShoppingCartController::class, 'removeFromCart'])->name('shopping-cart.remove');
+
+    Route::put('/shopping-cart/update-quantity/{id}', [ShoppingCartController::class, 'updateQuantity'])->name('shopping-cart.update-quantity');
+
+    Route::post('/shopping-cart/handle-payment/{id}', [ShoppingCartController::class, 'handlePayment'])->name('shopping-cart.handle-payment');
+
+    Route::post('shopping-cart/select_payment/{id}', [ShoppingCartController::class, 'selectPayment'])->name('shopping-cart.select_payment');
+
+    Route::post('/shopping-cart/process-payment/{id}', [ShoppingCartController::class, 'processPayment'])->name('shopping-cart.process-payment');
 });
