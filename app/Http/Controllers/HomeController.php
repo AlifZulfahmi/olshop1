@@ -30,7 +30,7 @@ class HomeController extends Controller
     {
         $products = Product::all(); // Mengambil semua data produk
 
-        return view('home', compact('products')); // Mengirim data produk ke view welcome
+        return view('home', compact('products')); // Mengirim data produk ke view home
     }
 
     public function getProducts()

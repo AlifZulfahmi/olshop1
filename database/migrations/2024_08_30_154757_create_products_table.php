@@ -8,26 +8,23 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('detail');
-            $table->integer('price');
-            $table->string('image')->nullable(); // Add this line for the image
-            $table->string('category')->nullable(); // Add this line for the image
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->integer('stock');
+            $table->string('image')->nullable();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

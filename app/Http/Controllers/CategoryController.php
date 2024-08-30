@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
         $mainCategories = Category::whereNull('parent_id')->get(); // Kategori utama
         $subCategories = Category::whereNotNull('parent_id')->get(); // Sub kategori
-    
+
         return view('category.index', compact('mainCategories', 'subCategories'));
     }
 
