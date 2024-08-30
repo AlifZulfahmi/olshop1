@@ -2,7 +2,6 @@
 @section('content')
     <div class="page-inner mt-4">
         <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Create Main Category</a>
-
         <!-- Main Category Table -->
         <h4>Main Categories</h4>
         <div class="table-responsive mb-4">

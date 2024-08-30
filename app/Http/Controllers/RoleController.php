@@ -21,30 +21,30 @@ class RoleController extends Controller
      */
     function __construct()
     {
-        
+
         $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
-    public function welcome()
-    {
-        if (Gate::allows('view-welcome')) {
-            return view('welcome');
-        } else {
-            abort(403); // Akses ditolak jika pengguna tidak memiliki izin
-        }
-    }
+    // public function welcome()
+    // {
+    //     if (Gate::allows('view-welcome')) {
+    //         return view('welcome');
+    //     } else {
+    //         abort(403); // Akses ditolak jika pengguna tidak memiliki izin
+    //     }
+    // }
 
-    public function home()
-    {
-        if (Gate::allows('view-home')) {
-            return view('home');
-        } else {
-            abort(403); // Akses ditolak jika pengguna tidak memiliki izin
-        }
-    }
+    // public function home()
+    // {
+    //     if (Gate::allows('view-home')) {
+    //         return view('home');
+    //     } else {
+    //         abort(403); // Akses ditolak jika pengguna tidak memiliki izin
+    //     }
+    // }
 
     /**
      * Display a listing of the resource.
