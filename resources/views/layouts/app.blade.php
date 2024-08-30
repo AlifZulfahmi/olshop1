@@ -19,17 +19,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        .card-img-wrapper {
-            width: 100%;
-            height: 200px;
-            /* Atur sesuai kebutuhan */
-            overflow: hidden;
-        }
-
         .card-img-top {
             width: 100%;
-            height: 100%;
+            height: 200px;
+            /* Atur tinggi sesuai kebutuhan */
             object-fit: cover;
+            /* Memastikan gambar tetap proporsional */
         }
     </style>
 </head>
@@ -114,5 +109,26 @@
 
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function beli(productId) {
+        $.ajax({
+            url: '{{ '$products->id' }}',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_id: productId
+            },
+            success: function(response) {
+                // Tindakan setelah sukses (misalnya, tampilkan pesan atau lakukan refresh)
+                alert('Product bought successfully!');
+            },
+            error: function(xhr) {
+                // Tindakan jika terjadi error
+                alert('An error occurred.');
+            }
+        });
+    }
+</script>
 
 </html>

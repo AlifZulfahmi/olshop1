@@ -29,7 +29,7 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
-    
+
     public function allProducts()
     {
         return $this->hasMany(Product::class)->orWhereHas('subCategories.products');

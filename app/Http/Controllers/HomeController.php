@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Orders;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -40,19 +40,23 @@ class HomeController extends Controller
 
     public function beli($id)
     {
-        if (!Auth::user()) {
-
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $product = Product::find($id);
 
-        Orders::create([
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found');
+        }
 
+        Order::create([
             'user_id' => Auth::user()->id,
-            'total_harga' => $product->harga,
+            'total_harga' => $product->price,
             'produk_id' => $product->id,
             'status' => 0
         ]);
+
+        return redirect()->back()->with('success', 'Product purchased successfully!');
     }
 }

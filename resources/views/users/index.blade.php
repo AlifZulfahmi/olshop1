@@ -68,7 +68,7 @@
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 @if ($user->profile_image)
-                                                    <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
+                                                    <img src="{{ asset('storage/public/profile_images/' . $user->profile_image) }}"
                                                         alt="{{ $user->name }}"
                                                         style="width: 50px; height: 50px; object-fit: cover;"
                                                         class="rounded-circle">

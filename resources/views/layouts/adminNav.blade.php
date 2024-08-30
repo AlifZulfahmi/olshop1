@@ -51,7 +51,7 @@
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                     <div class="avatar-sm">
                         @if (Auth::user()->profile_image)
-                            <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}"
+                            <img src="{{ asset('storage/public/profile_images/' . Auth::user()->profile_image) }}"
                                 alt="image profile" class="avatar-img rounded" />
                         @else
                             <!-- Jika tidak, gunakan gambar default -->
@@ -70,7 +70,7 @@
                                 <div class="avatar-lg">
                                     <!-- Cek apakah pengguna memiliki gambar profil -->
                                     @if (Auth::user()->profile_image)
-                                        <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}"
+                                        <img src="{{ asset('storage/public/profile_images/' . Auth::user()->profile_image) }}"
                                             alt="image profile" class="avatar-img rounded" />
                                     @else
                                         <!-- Jika tidak, gunakan gambar default -->
