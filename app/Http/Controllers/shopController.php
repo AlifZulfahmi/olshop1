@@ -8,18 +8,16 @@ use Illuminate\Http\Request;
 
 class shopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withCount(['products', 'subCategories as sub_products_count' => function ($query) {
-            $query->withCount('products');
-        }])
-            ->with(['subCategories' => function ($query) {
-                $query->withCount('products');
-            }])
-            ->get();
+        // Ambil semua kategori
+        $categories = Category::all();
 
-        $products = Product::with('category')->paginate(12);
-
+        // Filter produk berdasarkan kategori yang dipilih
+        $products = Product::when($request->category, function ($query) use ($request) {
+            $query->whereIn('category_id', $request->category);
+        })->latest()->paginate(12);
+    
         return view('shop', compact('products', 'categories'));
     }
 }
