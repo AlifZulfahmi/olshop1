@@ -28,24 +28,6 @@ class RoleController extends Controller
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
-    // public function welcome()
-    // {
-    //     if (Gate::allows('view-welcome')) {
-    //         return view('welcome');
-    //     } else {
-    //         abort(403); // Akses ditolak jika pengguna tidak memiliki izin
-    //     }
-    // }
-
-    // public function home()
-    // {
-    //     if (Gate::allows('view-home')) {
-    //         return view('home');
-    //     } else {
-    //         abort(403); // Akses ditolak jika pengguna tidak memiliki izin
-    //     }
-    // }
-
     /**
      * Display a listing of the resource.
      *

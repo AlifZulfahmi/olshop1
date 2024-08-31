@@ -34,12 +34,9 @@
                     @forelse ($orders as $order)
                         @php
                             $product = App\Models\Product::find($order->produk_id);
-                            $statusText = '';
-                            $actionButton = '';
-                            $totalPrice = $order->total_harga;
-
+                            $totalPrice = $order->total_harga * $order->quantity;
                         @endphp
-                        <tr data-product-id="{{ $product->id }}" data-price="{{ $product->price }}">
+                        <tr data-product-id="{{ $product->id ?? '' }}" data-price="{{ $product->price ?? '' }}">
                             <td>{{ $order->created_at->format('d M Y') }}</td>
                             <td>{{ $product->name ?? 'Product Not Found' }}</td>
                             <td>
@@ -50,7 +47,7 @@
                                     <img src="https://via.placeholder.com/100" alt="No Image">
                                 @endif
                             </td>
-                            <td class="total-price">{{ $totalPrice }}</td>
+                            <td class="total-price">{{ number_format($totalPrice, 2) }}</td>
                             <td>
                                 <form action="{{ route('shopping-cart.update-quantity', $order->id) }}" method="POST"
                                     style="display:inline;" class="quantity-form">
@@ -62,21 +59,23 @@
                                 </form>
                             </td>
                             <td>
-                                <span class="order-status">{{ $statusText }}</span>
-                            </td>
-                            <td>
-                                {!! $actionButton !!}
                                 <form action="{{ route('shopping-cart.remove', $order->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                                 </form>
+                                <form action="{{ route('checkout-process') }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <input type="hidden" name="product_ids[]" value="{{ $order->produk_id }}">
+                                    <input type="hidden" name="quantities[]" value="{{ $order->quantity }}">
+                                    <button type="submit" class="btn btn-success btn-sm">Checkout</button>
+                                </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No items in your cart.</td>
+                            <td colspan="6" class="text-center">No items in your cart.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -85,18 +84,7 @@
 
         @if ($orders->count())
             <div class="d-flex justify-content-end mb-4">
-                <h4>Total Price: <span id="total-price">{{ $orders->sum('total_harga') }}</span></h4>
-            </div>
-
-            <!-- Tombol untuk Pembayaran -->
-            <div class="d-flex justify-content-end">
-                <!-- Menggunakan ID pesanan yang pertama di dalam daftar -->
-                @if ($orders->count())
-                    <form action="{{ route('shopping-cart.select_payment', $orders->first()->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary">Chekout</button>
-                    </form>
-                @endif
+                <h4>Total Price: <span id="total-price">{{ number_format($orders->sum('total_harga'), 2) }}</span></h4>
             </div>
         @endif
     </div>

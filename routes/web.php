@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\shopController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -41,19 +43,28 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
 
     // Display the shopping cart
+    // Halaman keranjang belanja
     Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart.index');
 
-    // Add a product to the shopping cart
+    // Tambah produk ke keranjang
     Route::post('/shopping-cart/add/{id}', [ShoppingCartController::class, 'addToCart'])->name('shopping-cart.add');
 
-    // Remove a product from the shopping cart
+    // Hapus produk dari keranjang
     Route::delete('/shopping-cart/remove/{id}', [ShoppingCartController::class, 'removeFromCart'])->name('shopping-cart.remove');
 
+    // Perbarui kuantitas produk di keranjang
     Route::put('/shopping-cart/update-quantity/{id}', [ShoppingCartController::class, 'updateQuantity'])->name('shopping-cart.update-quantity');
 
-    Route::post('/shopping-cart/handle-payment/{id}', [ShoppingCartController::class, 'handlePayment'])->name('shopping-cart.handle-payment');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout-process');
 
-    Route::post('shopping-cart/select_payment/{id}', [ShoppingCartController::class, 'selectPayment'])->name('shopping-cart.select_payment');
+    // routes/web.php
+    Route::post('/checkout-process', [CheckoutController::class, 'process'])->name('checkout-process');
 
-    Route::post('/shopping-cart/process-payment/{id}', [ShoppingCartController::class, 'processPayment'])->name('shopping-cart.process-payment');
+    Route::get('/checkout/{transactionId}', [CheckoutController::class, 'showCheckout'])->name('checkout.show');
+
+    // Halaman sukses checkout (opsional, jika Anda memerlukan halaman sukses terpisah)
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout-success');
+
+    // Menampilkan transaksi pengguna
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 });

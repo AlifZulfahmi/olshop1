@@ -48,6 +48,7 @@ class ProductController extends Controller
         return view('products.create', compact('subCategories'));
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -84,6 +85,8 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Product created successfully.');
     }
+
+
 
     /**
      * Display the specified resource.

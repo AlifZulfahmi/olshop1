@@ -28,7 +28,7 @@
                         <div class="profile-picture">
                             <div class="avatar avatar-xl">
                                 @if ($user->profile_image)
-                                    <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
+                                    <img src="{{ asset('storage/public/profile_images/' . $user->profile_image) }}"
                                         alt="Profile Picture" class="avatar-img rounded-circle" />
                                 @else
                                     <img src="{{ asset('assets/img/profile.jpg') }}" alt="Profile Picture"

@@ -13,7 +13,6 @@ class Order extends Model
         'user_id',
         'produk_id',
         'total_harga',
-        'status',
         'quantity'
     ];
 
@@ -34,6 +33,6 @@ class Order extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product::class, 'produk_id');
+        return $this->belongsTo(Product::class, 'produk_id', 'id');
     }
 }
