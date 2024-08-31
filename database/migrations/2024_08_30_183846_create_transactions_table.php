@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->integer('quantity'); // Add quantity column
             $table->decimal('price', 15, 2); // Total price of the transaction
             $table->string('status');
             $table->text('snap_token')->nullable();

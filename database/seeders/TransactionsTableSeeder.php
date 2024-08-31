@@ -12,10 +12,10 @@ class TransactionsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Transaction::create([
-            'user_id' => 1,
-            'total_price' => 100000,
-            'status' => 'pending',
-        ]);
+        // \App\Models\Transaction::create([
+        //     'user_id' => 1,
+        //     'price' => 100000,
+        //     'status' => 'pending',
+        // ]);
     }
 }

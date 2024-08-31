@@ -66,6 +66,22 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#tables">
+                        <i class="fas fa-table"></i>
+                        <p>Laporan</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="tables">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('laporan.index') }}">
+                                    <span class="sub-item">Riwayat Transaksi</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#forms">
                         <i class="fas fa-pen-square"></i>
                         <p>Forms</p>
