@@ -28,21 +28,21 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {   
+    {
         $products = Product::latest()->take(8)->get();
         $categories = Category::all();
         $subCategories = Category::whereNotNull('parent_id')->get();
 
-        return view('landing', compact('products', 'subCategories','categories'));
+        return view('landing', compact('products', 'subCategories', 'categories'));
     }
 
     public function home()
-    {   
+    {
         $products = Product::latest()->take(8)->get();
         $categories = Category::all();
         $subCategories = Category::whereNotNull('parent_id')->get();
 
-        return view('home', compact('products', 'subCategories','categories'));
+        return view('home', compact('products', 'subCategories', 'categories'));
     }
 
     public function getProducts()

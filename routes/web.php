@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| codingan github
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', [HomeController::class, 'index'])->name('cart.add');
 
 Route::get('/about', function () {
