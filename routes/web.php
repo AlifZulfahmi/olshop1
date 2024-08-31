@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\shopController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\UserProductController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -20,9 +21,19 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [HomeController::class, 'index'])->name('cart.add');
 
+Route::post('/cart/add', [UserProductController::class, 'add']);
+Route::delete('/cart/remove/{productId}', [UserProductController::class, 'remove'])->name('cart.remove');
+Route::get('/cart', [UserProductController::class, 'show']);
 
-Route::get('/', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
+Route::get('/checkout', function () {
+    return view('checkout');
+})->name('checkout');
+
+Route::get('/product/{id}', [UserProductController::class, 'detail'])->name('detail');
+
+Route::get('/shop', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
 
 // web.php
 Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
@@ -49,7 +60,7 @@ Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);

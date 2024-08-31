@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
@@ -11,15 +12,15 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // /**
+    //  * Create a new controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -27,15 +28,28 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('home');
+    {   
+        $products = Product::latest()->take(8)->get();
+        $categories = Category::all();
+        $subCategories = Category::whereNotNull('parent_id')->get();
+
+        return view('landing', compact('products', 'subCategories','categories'));
+    }
+
+    public function home()
+    {   
+        $products = Product::latest()->take(8)->get();
+        $categories = Category::all();
+        $subCategories = Category::whereNotNull('parent_id')->get();
+
+        return view('home', compact('products', 'subCategories','categories'));
     }
 
     public function getProducts()
     {
         $products = Product::all(); // Mengambil semua data produk
 
-        return view('welcome', compact('products')); // Mengirim data produk ke view welcome
+        return view('shop', compact('products')); // Mengirim data produk ke view welcome
     }
 
     public function beli($id)
