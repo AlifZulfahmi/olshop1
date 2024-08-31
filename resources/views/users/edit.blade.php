@@ -95,7 +95,7 @@
                                         <div class="form-group">
                                             <strong>Profile Image:</strong>
                                             @if ($user->profile_image)
-                                                <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}"
+                                                <img src="{{ asset('storage/public/profile_images/' . $user->profile_image) }}"
                                                     alt="Profile Image" width="100" class="mb-3">
                                             @endif
                                             <input type="file" name="profile_image" class="form-control">

@@ -19,7 +19,7 @@ class Product extends Model
         'detail',
         'price',
         'stock',
-        'category_id',
+        'category',
         'image',
     ];
 

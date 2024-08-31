@@ -68,7 +68,7 @@
                                 Lihat Detail
                                 <div class="tooltip-arrow" data-popper-arrow=""></div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
 
                     <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{ $product->name }}</a>

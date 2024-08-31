@@ -30,10 +30,10 @@ class ProductController extends Controller
      */
     public function index(): View
     {
-        $products = Product::latest()->paginate(5);
+        $products = Product::latest()->paginate(0);
 
         return view('products.index', compact('products'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+            ->with('i', (request()->input('page', 1) - 1) * 0);
     }
 
     /**
@@ -44,9 +44,10 @@ class ProductController extends Controller
     public function create(): View
     {
         $subCategories = Category::whereNotNull('parent_id')->get();
-        
+
         return view('products.create', compact('subCategories'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -84,6 +85,8 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Product created successfully.');
     }
+
+
 
     /**
      * Display the specified resource.

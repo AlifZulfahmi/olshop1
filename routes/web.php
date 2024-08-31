@@ -9,6 +9,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\shopController;
 use App\Http\Controllers\ShoppingCartController;
 use App\Http\Controllers\UserProductController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -35,28 +37,9 @@ Route::get('/product/{id}', [UserProductController::class, 'detail'])->name('det
 
 Route::get('/shop', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
 
-// web.php
-Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
-
-// Display the shopping cart
-Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart.index');
-
-// Add a product to the shopping cart
-Route::post('/shopping-cart/add/{id}', [ShoppingCartController::class, 'addToCart'])->name('shopping-cart.add');
-
-// Remove a product from the shopping cart
-Route::delete('/shopping-cart/remove/{id}', [ShoppingCartController::class, 'removeFromCart'])->name('shopping-cart.remove');
-
-Route::put('/shopping-cart/update-quantity/{id}', [ShoppingCartController::class, 'updateQuantity'])->name('shopping-cart.update-quantity');
-
-//payment
-Route::get('/shopping-cart/select-payment/{id}', [ShoppingCartController::class, 'selectPayment'])->name('shopping-cart.select-payment');
-
-Route::post('/shopping-cart/process-payment/{id}', [ShoppingCartController::class, 'processPayment'])->name('shopping-cart.process-payment');
-
-
-
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
@@ -67,4 +50,32 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    // web.php
+    Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
+
+    // Display the shopping cart
+    // Halaman keranjang belanja
+    Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping-cart.index');
+
+    // Tambah produk ke keranjang
+    Route::post('/shopping-cart/add/{id}', [ShoppingCartController::class, 'addToCart'])->name('shopping-cart.add');
+
+    // Hapus produk dari keranjang
+    Route::delete('/shopping-cart/remove/{id}', [ShoppingCartController::class, 'removeFromCart'])->name('shopping-cart.remove');
+
+    // Perbarui kuantitas produk di keranjang
+    Route::put('/shopping-cart/update-quantity/{id}', [ShoppingCartController::class, 'updateQuantity'])->name('shopping-cart.update-quantity');
+
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout-process');
+
+    // routes/web.php
+    Route::post('/checkout-process', [CheckoutController::class, 'process'])->name('checkout-process');
+
+    Route::get('/checkout/{transactionId}', [CheckoutController::class, 'showCheckout'])->name('checkout.show');
+
+    // Halaman sukses checkout (opsional, jika Anda memerlukan halaman sukses terpisah)
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout-success');
+
+    // Menampilkan transaksi pengguna
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 });

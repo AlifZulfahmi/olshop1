@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
             'Minuman Dingin',
             'Ciki - Ciki'
         ])->get()->keyBy('name');
-        
+
         $products = [
             ['name' => 'Burger', 'detail' => 'Burger dengan daging sapi dan sayuran segar.', 'price' => 30000, 'stock' => 30, 'category' => 'Makanan Cepat Saji', 'image' => 'https://www.pixelstalk.net/wp-content/uploads/2016/08/Fast-food-backgrounds-free-download.jpg'],
             ['name' => 'Hot Dog', 'detail' => 'Hot dog dengan saus dan mustard.', 'price' => 25000, 'stock' => 40, 'category' => 'Makanan Cepat Saji', 'image' => 'https://i.pinimg.com/originals/9e/37/0f/9e370f382275d949d81fb3f94df594c3.jpg'],

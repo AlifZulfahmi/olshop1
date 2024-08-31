@@ -28,7 +28,7 @@
                         @endif
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text">Rp.{{ number_format($product->price, 0, ',', '.') }}</p>
+                            <p class="card-text">Rp.{{ $product->price }}</p>
                             <p class="card-text">{{ $product->description }}</p>
                             <form action="{{ route('shopping-cart.add', $product->id) }}" method="POST">
                                 @csrf
