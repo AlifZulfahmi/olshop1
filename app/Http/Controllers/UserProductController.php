@@ -68,7 +68,43 @@ class UserProductController extends Controller
 
         return view('cart', compact('products', 'cart'));
     }
-    
+
+    public function count()
+    {
+        $cart = session()->get('cart', []);
+        $itemCount = count($cart); // Hitung jumlah unique product IDs
+
+        return response()->json([
+            'success' => true,
+            'count' => $itemCount
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity');
+
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$productId])) {
+            $cart[$productId] = $quantity; // Update quantity di session
+        }
+
+        session()->put('cart', $cart);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cart updated successfully!',
+            'cart' => $cart
+        ]);
+    }
+
     public function remove($productId)
     {
         $cart = session()->get('cart', []);
@@ -80,5 +116,13 @@ class UserProductController extends Controller
         }
 
         return response()->json(['success' => false], 400);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'like', "%{$query}%")->get();
+
+        return response()->json($products);
     }
 }

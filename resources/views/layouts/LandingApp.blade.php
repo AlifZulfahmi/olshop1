@@ -19,9 +19,6 @@
     <div id="alert-container" class="hidden">
         <x-alert-success :message="'Item added to cart successfully.'" />
     </div>
-    <div id="alert-container-danger" class="hidden">
-        <x-alert-success :message="'Item Deleted'" />
-    </div>
     @yield('content')
 
     @include('layouts.footer')

@@ -13,15 +13,22 @@
             </div>
 
             <div class="mt-6 sm:mt-8 lg:mt-0">
-                <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">{{ $product->name }}</h1>
+                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-2xl">{{ $product->name }}</h1>
                 <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
-                    <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-                        Rp. {{ number_format($product->price, 0, ',', '.') }}
+                    <p class="text-xl font-bold text-gray-900 sm:text-3xl">
+                        Rp. {{ number_format($product->price, 0, ',', '.') }},-
                     </p>
-                    <span class="me-2 rounded bg-primary-100 px-3 py-2 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-                        {{$product->category->name}}
+                </div>
+                <div class="my-6 md:my-8">
+                    <span class="rounded bg-primary-100 px-3 py-2 text-xs font-medium text-primary-800">
+                        Stock : {{$product->stock}}
                     </span>
                 </div>
+                <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+                <p class="mb-6 text-gray-500 dark:text-gray-400">
+                    {{$product->detail}}
+                </p>
+                <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
 
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                     <input type="number" id="quantity" name="quantity" min="1" value="1" class="border rounded-lg w-16 text-center me-4" />
@@ -47,12 +54,6 @@
                         Add to cart
                     </button>
                 </div>
-
-                <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
-
-                <p class="mb-6 text-gray-500 dark:text-gray-400">
-                    {{$product->detail}}
-                </p>
             </div>
         </div>
     </div>

@@ -22,21 +22,27 @@
             </a>
           </li>
           <li class="shrink-0">
-            <a href="/cart" title="" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">
-              Cart
+            <a href="#category" title="" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">
+              Category
             </a>
           </li>
-          <li class="shrink-0">
-            <a href="/checkout" title="" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">
-              Checkout
+          <li id="page" data-dropdown-toggle="pages" class="items-center inline-flex justify-center">
+            <a href="#" title="" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">
+              Pages
             </a>
-          </li>
-          <li class="shrink-0">
-            <a href="/confirmation" title="" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">
-              Confirmation
-            </a>
+            <svg class="w-4 h-4 text-gray-900 dark:text-white ms-1 cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
+            </svg>
           </li>
         </ul>
+        <div id="pages" class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
+          <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
+            <li><a href="/about" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> About</a></li>
+            <li><a href="/contact" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Contact </a></li>
+            <li><a href="/privacy-policy" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Privacy Policy </a></li>
+            <li><a href="/terms-and-conditions" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Terms and Conditions </a></li>
+          </ul>
+        </div>
       </div>
 
       <div class="flex items-center lg:space-x-2">
@@ -50,7 +56,10 @@
           <span class="hidden sm:flex">
             <a href="/cart">My Cart</a>
           </span>
+          <span id="cartItemCount" class="hidden bg-red-600 text-white rounded-full text-xs font-bold w-5 h-5 flex items-center justify-center ms-2">0</span>
         </button>
+
+
 
         <button id="userDropdownButton1" data-dropdown-toggle="userDropdown1" type="button" class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium leading-none text-gray-900 dark:text-white">
           <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

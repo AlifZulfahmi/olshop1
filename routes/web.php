@@ -25,17 +25,32 @@ use Illuminate\Support\Facades\Auth;
 */
 Route::get('/', [HomeController::class, 'index'])->name('cart.add');
 
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
+Route::get('/privacy-policy', function () {
+    return view('pages.privacy');
+})->name('Privacy');
+Route::get('/terms-and-conditions', function () {
+    return view('pages.term');
+})->name('about');
+
+Route::get('/search', [UserProductController::class, 'search'])->name('search');
+
 Route::post('/cart/add', [UserProductController::class, 'add']);
 Route::delete('/cart/remove/{productId}', [UserProductController::class, 'remove'])->name('cart.remove');
 Route::get('/cart', [UserProductController::class, 'show']);
+Route::get('/cart/count', [UserProductController::class, 'count']);
+Route::post('/cart/update', [UserProductController::class, 'update']);
 
 Route::get('/checkout', function () {
     return view('checkout');
 })->name('checkout');
 
 Route::get('/product/{id}', [UserProductController::class, 'detail'])->name('detail');
-
-Route::get('/shop', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
 
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
