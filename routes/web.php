@@ -11,11 +11,13 @@ use App\Http\Controllers\ShoppingCartController;
 use App\Http\Controllers\UserProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderStatusController;
+
 use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| codingan github
+| codingan lokal
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -25,6 +27,15 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('cart.add');
+
+
+// Route::post('/cart/add', [UserProductController::class, 'add']);
+// Route::delete('/cart/remove/{productId}', [UserProductController::class, 'remove'])->name('cart.remove');
+// Route::get('/cart', [UserProductController::class, 'show']);
+
+// Route::get('/checkout', function () {
+//     return view('checkout');
+// })->name('checkout');
 
 Route::get('/about', function () {
     return view('pages.about');
@@ -39,19 +50,9 @@ Route::get('/terms-and-conditions', function () {
     return view('pages.term');
 })->name('about');
 
-Route::get('/search', [UserProductController::class, 'search'])->name('search');
-
-Route::post('/cart/add', [UserProductController::class, 'add']);
-Route::delete('/cart/remove/{productId}', [UserProductController::class, 'remove'])->name('cart.remove');
-Route::get('/cart', [UserProductController::class, 'show']);
-Route::get('/cart/count', [UserProductController::class, 'count']);
-Route::post('/cart/update', [UserProductController::class, 'update']);
-
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
-
 Route::get('/product/{id}', [UserProductController::class, 'detail'])->name('detail');
+
+Route::get('/shop', [HomeController::class, 'getProducts']); // Ganti route default '/' dengan route getProducts
 
 Route::get('/shop', [shopController::class, 'index'])->name('shop.index');
 
@@ -61,11 +62,15 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 
+Route::get('/laporan', [TransactionController::class, 'laporan'])->name('laporan.index');
+
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('order-status', OrderStatusController::class);
+
     // web.php
     Route::post('/beli/{id}', [HomeController::class, 'beli'])->name('beli');
 
@@ -87,12 +92,30 @@ Route::group(['middleware' => ['auth']], function () {
     // routes/web.php
     Route::post('/checkout-process', [CheckoutController::class, 'process'])->name('checkout-process');
 
-
     Route::get('/checkout/{transactionId}', [CheckoutController::class, 'showCheckout'])->name('checkout.show');
 
     // Halaman sukses checkout (opsional, jika Anda memerlukan halaman sukses terpisah)
-    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout-success');
+    Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout-success');
+
+    Route::get('/checkout/pending/{id}', [CheckoutController::class, 'pending'])->name('checkout-pending');
+
+    Route::get('/checkout/failed/{id}', [CheckoutController::class, 'failed'])->name('checkout-failed');
 
     // Menampilkan transaksi pengguna
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
+
+    Route::get('/laporan/cetak-pdf', [TransactionController::class, 'cetakPDF'])->name('laporan.cetakPDF');
+
+    Route::post('/invoice/generate', [TransactionController::class, 'generateInvoice'])->name('invoice.generate');
+
+    // Route untuk menampilkan status pesanan
+    Route::get('/order-status', [OrderStatusController::class, 'index'])->name('order_status.index');
+
+    // Route untuk memperbarui status pesanan
+    Route::put('/order-status/{id}', [OrderStatusController::class, 'update'])->name('order_status.update');
+
+    // Route::put('/order_status/updateStatusPengiriman/{id}', [OrderStatusController::class, 'updateStatusPengiriman'])
+    //     ->name('order_status.updateStatusPengiriman');
+
+    Route::post('/order_status/{id}/create', [OrderStatusController::class, 'create'])->name('order_status.create');
 });
