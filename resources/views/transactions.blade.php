@@ -22,8 +22,14 @@
                             <tbody>
                                 @forelse ($transactions as $transaction)
                                     <tr>
-                                        <td>{{ $transaction->product->name }}</td>
-                                        <td>Rp{{ number_format($transaction->product->price, 0, ',', '.') }}</td>
+                                        <td>
+                                            {{-- Check if the product exists --}}
+                                            {{ $transaction->product ? $transaction->product->name : 'Produk Tidak Ditemukan' }}
+                                        </td>
+                                        <td>
+                                            {{-- Check if the product exists before accessing its price --}}
+                                            {{ $transaction->product ? 'Rp' . number_format($transaction->product->price, 0, ',', '.') : '-' }}
+                                        </td>
                                         <td>
                                             @if ($transaction->status == 'pending')
                                                 <span

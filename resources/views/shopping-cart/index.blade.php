@@ -25,7 +25,7 @@
                         <th>Date Ordered</th>
                         <th>Product Name</th>
                         <th>Image</th>
-                        <th>Total Price</th>
+                        <th>Price</th> <!-- Ubah Total Price ke Price -->
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
@@ -34,7 +34,6 @@
                     @forelse ($orders as $order)
                         @php
                             $product = App\Models\Product::find($order->produk_id);
-                            $totalPrice = $order->total_harga * $order->quantity;
                         @endphp
                         <tr data-product-id="{{ $product->id ?? '' }}" data-price="{{ $product->price ?? '' }}">
                             <td>{{ $order->created_at->format('d M Y') }}</td>
@@ -47,7 +46,8 @@
                                     <img src="https://via.placeholder.com/100" alt="No Image">
                                 @endif
                             </td>
-                            <td class="total-price">{{ number_format($totalPrice, 2) }}</td>
+                            <!-- Tampilkan harga per unit, bukan total harga -->
+                            <td class="unit-price">{{ number_format($product->price ?? 0, 2) }}</td>
                             <td>
                                 <form action="{{ route('shopping-cart.update-quantity', $order->id) }}" method="POST"
                                     style="display:inline;" class="quantity-form">
@@ -90,7 +90,6 @@
     </div>
 
     @push('scripts')
-        <!-- DataTables JavaScript -->
         <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function() {

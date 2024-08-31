@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
     // routes/web.php
     Route::post('/checkout-process', [CheckoutController::class, 'process'])->name('checkout-process');
 
+
     Route::get('/checkout/{transactionId}', [CheckoutController::class, 'showCheckout'])->name('checkout.show');
 
     // Halaman sukses checkout (opsional, jika Anda memerlukan halaman sukses terpisah)

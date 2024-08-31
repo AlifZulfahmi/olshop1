@@ -6,22 +6,20 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\TransactionProduct;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-
-
     public function process(Request $request)
     {
-        $productIds = $request->input('product_ids');
-        $quantities = $request->input('quantities');
+        $productIds = $request->input('product_ids', []);
+        $quantities = $request->input('quantities', []);
 
         // Validasi jumlah produk dan kuantitas
-        if (count($productIds) !== count($quantities)) {
+        if (!is_array($productIds) || !is_array($quantities) || count($productIds) !== count($quantities)) {
             return redirect()->back()->with('error', 'Jumlah produk dan kuantitas tidak sesuai.');
         }
+
 
         $totalPrice = 0;
         $transactions = [];
@@ -55,8 +53,8 @@ class CheckoutController extends Controller
         // Konfigurasi Midtrans
         \Midtrans\Config::$serverKey = config('midtrans.server_key');
         \Midtrans\Config::$isProduction = false;
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
+        \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
+        \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
 
         // Siapkan parameter untuk Snap Token
         $params = [
@@ -85,68 +83,16 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.show', ['transactionId' => $transactions[0]->id]);
     }
 
-
-
-
-    private function calculateTotalPrice(array $productIds, array $quantities)
-    {
-        $totalPrice = 0;
-        foreach ($productIds as $index => $productId) {
-            $totalPrice += $this->getProductPrice($productId) * $quantities[$index];
-        }
-        return $totalPrice;
-    }
-
-    private function getProductPrice($productId)
-    {
-        return Product::find($productId)->price ?? 0;
-    }
-
-
-
-
-
-    // public function checkout($transactionId)
-    // {
-    //     // Temukan transaksi berdasarkan ID yang diteruskan
-    //     $transaction = Transaction::find($transactionId);
-
-    //     // Pastikan transaksi ditemukan
-    //     if (!$transaction) {
-    //         return redirect()->back()->with('error', 'Transaction not found.');
-    //     }
-
-    //     // Temukan pesanan terkait berdasarkan transaksi
-    //     $order = Order::where('produk_id', $transaction->product_id)
-    //         ->where('user_id', $transaction->user_id)
-    //         ->first();
-
-    //     // Pastikan pesanan ditemukan
-    //     if (!$order) {
-    //         return redirect()->back()->with('error', 'Order not found.');
-    //     }
-
-    //     // Ambil produk dari konfigurasi atau berdasarkan ID produk yang ada
-    //     $products = config('products');
-    //     $product = collect($products)->firstWhere('id', $transaction->product_id);
-
-    //     return view('checkout', compact('transaction', 'product', 'order'));
-    // }
-
     public function showCheckout($transactionId)
     {
-        // Ambil transaksi berdasarkan ID
         $transaction = Transaction::find($transactionId);
 
-        // Pastikan transaksi ditemukan
         if (!$transaction) {
             return redirect()->route('home')->with('error', 'Transaction not found.');
         }
 
-        // Ambil produk terkait untuk transaksi ini
-        $product = $transaction->product; // Menggunakan relasi
+        $product = $transaction->product;
 
-        // Pastikan produk ditemukan
         if (!$product) {
             return redirect()->route('home')->with('error', 'Product not found for this transaction.');
         }
