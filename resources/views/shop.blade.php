@@ -219,7 +219,8 @@
                                                 class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                                             <label for="category-{{ $category->id }}"
                                                 class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}
-                                                ({{ $category->products->count() }})</label>
+                                                ({{ $category->products->count() }})
+                                            </label>
                                         </div>
                                     </div>
                                 @endforeach
